@@ -1,32 +1,102 @@
-workflow-aggregator:latest
-git:latest
-pipeline-model-definition:latest
-job-dsl:latest
+# Base plugins
 configuration-as-code:latest
+job-dsl:latest
+git:latest
 credentials:latest
 credentials-binding:latest
-docker-workflow:latest
-sonar:latest
-blueocean:latest
-dashboard-view:latest
-android-emulator:latest
-junit:latest
-coverage:latest
-htmlpublisher:latest
-email-ext:latest
-slack:latest
-ansicolor:latest
-build-timeout:latest
-timestamper:latest
+cloudbees-folder:latest
+matrix-auth:latest
+authorize-project:latest
+ssh-credentials:latest
+
+# Pipeline plugins
+pipeline-model-definition:latest
+workflow-aggregator:latest
 pipeline-stage-view:latest
-promoted-builds:latest
-google-play-android-publisher:latest
-ssh:latest
-kubernetes:latest
+pipeline-build-step:latest
+pipeline-github-lib:latest
+pipeline-graph-analysis:latest
 pipeline-input-step:latest
 pipeline-milestone-step:latest
-lockable-resources:latest
-config-file-provider:latest
-envinject:latest
-mask-passwords:latest
-aws-secrets-manager-credentials-provider:latest
+pipeline-rest-api:latest
+pipeline-utility-steps:latest
+
+# Docker integration
+docker-workflow:latest
+docker-plugin:latest
+docker-build-step:latest
+docker-compose-build-step:latest
+
+# UI enhancements
+blueocean:latest
+dashboard-view:latest
+dark-theme:latest
+
+# Mobile specific
+android-emulator:latest
+android-lint:latest
+htmlpublisher:latest
+google-play-android-publisher:latest
+xcode-integration:latest
+warnings-ng:latest
+
+# Code quality
+sonarqube-generic-coverage:latest
+sonargraph-integration:latest
+sonar:latest
+findbugs:latest
+checkstyle:latest
+dependency-check-jenkins-plugin:latest
+pmd:latest
+jacoco:latest
+
+# Binary repository integration
+nexus-artifact-uploader:latest
+artifactory:latest
+nexus-jenkins-plugin:latest
+
+# Continuous delivery
+delivery-pipeline-plugin:latest
+release:latest
+promoted-builds:latest
+parameterized-trigger:latest
+build-pipeline-plugin:latest
+
+# Notifications and reporting
+email-ext:latest
+slack:latest
+teams-notifications:latest
+discord-notifier:latest
+telegram-notifications:latest
+influxdb:latest
+build-monitor-plugin:latest
+
+# Security
+dependency-track:latest
+owasp-dependencies:latest
+secrets-manager:latest
+
+# SCM enhancements
+bitbucket:latest
+gitlab-plugin:latest
+github-branch-source:latest
+github-pr-comment-build:latest
+github-api:latest
+
+# Deployment
+kubernetes:latest
+kubernetes-cd:latest
+azure-app-service:latest
+aws-device-farm:latest
+aws-codebuild:latest
+aws-lambda:latest
+google-kubernetes-engine:latest
+firebase-plugin:latest
+
+# Testing
+junit:latest
+test-results-analyzer:latest
+robotframework:latest
+appium:latest
+performance:latest
+gatling:latest

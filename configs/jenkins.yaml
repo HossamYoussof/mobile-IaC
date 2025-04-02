@@ -1,12 +1,35 @@
 jenkins:
-  systemMessage: "Mobile CI/CD Environment"
-  securityRealm:
-    local:
-      allowsSignup: false
-      users:
-        - id: "admin"
-          password: "admin"
-  authorizationStrategy:
-    loggedInUsersCanDoAnything:
-      allowAnonymousRead: false
-      
+  systemMessage: "Mobile CI/CD Environment - Managed by Jenkins Configuration as Code"
+  numExecutors: 4
+  scmCheckoutRetryCount: 3
+  mode: NORMAL
+  
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - usernamePassword:
+              scope: GLOBAL
+              id: "github-credentials"
+              username: "github-user"
+              password: "${GITHUB_TOKEN:-changeme}"
+              description: "GitHub credentials"
+          - usernamePassword:
+              scope: GLOBAL
+              id: "nexus-credentials"
+              username: "admin"
+              password: "admin123"
+              description: "Nexus Repository credentials"
+
+jobs:
+  - file: /var/jenkins_config/seeds/android-pipeline.groovy
+
+tool:
+  git:
+    installations:
+      - name: Default
+        home: git
+
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false

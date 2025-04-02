@@ -1,0 +1,86 @@
+pipeline {
+    agent {
+        docker {
+            image 'android-builder'
+            args '-v ${WORKSPACE}:/projects'
+            reuseNode true
+        }
+    }
+    
+    environment {
+        ANDROID_HOME = '/opt/android-sdk'
+        GRADLE_USER_HOME = "${WORKSPACE}/.gradle"
+    }
+    
+    stages {
+        stage('Setup') {
+            steps {
+                sh 'yes | sdkmanager --licenses || true'
+                sh 'yes | sdkmanager "build-tools;30.0.3" "platforms;android-30" || true'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                sh './gradlew clean assemble${BUILD_TYPE.capitalize()}'
+            }
+        }
+        
+        stage('Test') {
+            when {
+                expression { params.RUN_TESTS }
+            }
+            steps {
+                sh './gradlew test${BUILD_TYPE.capitalize()}UnitTest'
+                junit '**/build/test-results/**/*.xml'
+            }
+        }
+        
+        stage('Static Analysis') {
+            when {
+                expression { params.STATIC_ANALYSIS }
+            }
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh '''
+                    ./gradlew sonarqube \
+                      -Dsonar.projectKey=${JOB_NAME.replaceAll('/', '_')} \
+                      -Dsonar.projectName=${JOB_NAME.split('/').last()} \
+                      -Dsonar.host.url=http://sonarqube:9000 \
+                      -Dsonar.login=admin \
+                      -Dsonar.password=admin
+                    '''
+                }
+            }
+        }
+        
+        stage('Publish') {
+            steps {
+                archiveArtifacts artifacts: "**/build/outputs/apk/${BUILD_TYPE}/*.apk", fingerprint: true
+                
+                // Upload to Nexus Repository
+                script {
+                    def apkFiles = findFiles(glob: "**/build/outputs/apk/${BUILD_TYPE}/*.apk")
+                    if (apkFiles.length > 0) {
+                        def apkFile = apkFiles[0]
+                        def apkName = apkFile.name
+                        def nexusUrl = "http://nexus:8081/repository/android-apps/"
+                        
+                        sh """
+                        curl -v -u admin:admin123 --upload-file ${apkFile.path} \
+                        "${nexusUrl}${JOB_NAME}/${BUILD_NUMBER}/${apkName}"
+                        """
+                        
+                        echo "APK published to Nexus: ${nexusUrl}${JOB_NAME}/${BUILD_NUMBER}/${apkName}"
+                    }
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
