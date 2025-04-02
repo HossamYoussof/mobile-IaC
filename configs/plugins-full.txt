@@ -11,7 +11,7 @@ blueocean:latest
 dashboard-view:latest
 android-emulator:latest
 junit:latest
-jacoco:latest
+coverage:latest
 htmlpublisher:latest
 email-ext:latest
 slack:latest
