@@ -54,7 +54,6 @@ setup_environment() {
   # Copy configuration files
   cp configs/Dockerfile jenkins/
   cp configs/jenkins.yaml jenkins/casc/
-  cp configs/docker-compose.yml ./
   
   # Select plugin configuration
   select_plugin_config
