@@ -23,9 +23,8 @@ if ! command -v docker-compose &> /dev/null; then
   exit 1
 fi
 
-# Create directories
+# Create projects directory if it doesn't exist
 mkdir -p projects
-mkdir -p jenkins/casc
 
 # Choose Jenkins plugin configuration
 select_plugin_config() {
@@ -38,12 +37,26 @@ select_plugin_config() {
   read plugin_choice
   
   case $plugin_choice in
-    1) cp configs/plugins-minimal.txt jenkins/plugins.txt ;;
-    2) cp configs/plugins-core.txt jenkins/plugins.txt ;;
-    3) cp configs/plugins-mobile.txt jenkins/plugins.txt ;;
-    4) cp configs/plugins-full.txt jenkins/plugins.txt ;;
-    *) echo -e "${RED}Invalid choice, using minimal plugins${NC}"
-       cp configs/plugins-minimal.txt jenkins/plugins.txt ;;
+    1) 
+      echo -e "${GREEN}Using minimal plugins${NC}"
+      export PLUGINS_FILE="configs/plugins-minimal.txt" 
+      ;;
+    2) 
+      echo -e "${GREEN}Using core plugins${NC}"
+      export PLUGINS_FILE="configs/plugins-core.txt" 
+      ;;
+    3) 
+      echo -e "${GREEN}Using mobile-specific plugins${NC}"
+      export PLUGINS_FILE="configs/plugins-mobile.txt" 
+      ;;
+    4) 
+      echo -e "${GREEN}Using full plugin set${NC}"
+      export PLUGINS_FILE="configs/plugins-full.txt" 
+      ;;
+    *) 
+      echo -e "${RED}Invalid choice, using minimal plugins${NC}"
+      export PLUGINS_FILE="configs/plugins-minimal.txt" 
+      ;;
   esac
 }
 
@@ -51,12 +64,11 @@ select_plugin_config() {
 setup_environment() {
   echo -e "${YELLOW}Setting up CI/CD environment...${NC}"
   
-  # Copy configuration files
-  cp configs/Dockerfile jenkins/
-  cp configs/jenkins.yaml jenkins/casc/
-  
   # Select plugin configuration
   select_plugin_config
+  
+  # Export the Docker build argument for the plugins file
+  export PLUGINS_FILE
   
   echo -e "${YELLOW}Starting CI/CD environment...${NC}"
   docker-compose up -d --build
@@ -65,6 +77,38 @@ setup_environment() {
   echo "Jenkins: http://localhost:8080 (admin/admin)"
   echo "Nexus: http://localhost:8081"
   echo "SonarQube: http://localhost:9000 (admin/admin)"
+}
+
+# Remove Docker data function
+remove_docker_data() {
+  echo -e "${RED}WARNING: This will remove all Docker volumes for this project.${NC}"
+  echo -e "${RED}All data including Jenkins configurations, build history, SonarQube data, and Nexus repositories will be lost.${NC}"
+  echo -n "Are you sure you want to continue? (y/N): "
+  read confirm
+  
+  if [[ $confirm == "y" || $confirm == "Y" ]]; then
+    echo -e "${YELLOW}Stopping containers...${NC}"
+    docker-compose down
+    
+    echo -e "${YELLOW}Removing Docker volumes...${NC}"
+    docker volume rm jenkins_home android_sdk nexus-data sonarqube_data sonarqube_logs sonarqube_extensions 2>/dev/null || true
+    
+    echo -e "${GREEN}Docker volumes removed successfully.${NC}"
+    echo "You can now restart the environment with a clean state."
+  else
+    echo -e "${YELLOW}Operation cancelled.${NC}"
+  fi
+}
+
+# List Docker volumes
+list_docker_volumes() {
+  echo -e "${YELLOW}Listing Docker volumes for this project:${NC}"
+  docker volume ls --filter name=jenkins_home
+  docker volume ls --filter name=android_sdk
+  docker volume ls --filter name=nexus-data
+  docker volume ls --filter name=sonarqube_data
+  docker volume ls --filter name=sonarqube_logs
+  docker volume ls --filter name=sonarqube_extensions
 }
 
 # Main menu function
@@ -78,7 +122,9 @@ show_menu() {
   echo "4) Stop environment"
   echo "5) View Jenkins logs"
   echo "6) Shell into Jenkins container"
-  echo "7) Exit"
+  echo "7) List Docker volumes"
+  echo "8) Remove Docker data (reset environment)"
+  echo "9) Exit"
   echo -e "${GREEN}========================================${NC}"
   echo -n "Please enter your choice: "
 }
@@ -94,6 +140,7 @@ while true; do
       ;;
     2)
       select_plugin_config
+      export PLUGINS_FILE
       docker-compose up -d --build jenkins
       echo -e "${GREEN}Jenkins container rebuilt${NC}"
       ;;
@@ -113,6 +160,12 @@ while true; do
       docker exec -it mobile-cicd-jenkins bash
       ;;
     7)
+      list_docker_volumes
+      ;;
+    8)
+      remove_docker_data
+      ;;
+    9)
       echo -e "${GREEN}Exiting. Goodbye!${NC}"
       exit 0
       ;;
