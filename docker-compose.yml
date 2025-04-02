@@ -46,31 +46,14 @@ services:
       - cicd-network
     restart: unless-stopped
 
-  postgres:
-    image: postgres:13
-    container_name: sonarqube-db
-    environment:
-      POSTGRES_USER: sonar
-      POSTGRES_PASSWORD: sonar
-      POSTGRES_DB: sonar
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - cicd-network
-    restart: unless-stopped
-
   sonarqube:
     image: sonarqube:community
     container_name: mobile-sonarqube
-    depends_on:
-      - postgres
     ports:
       - "9000:9000"
     environment:
-      SONAR_JDBC_URL: jdbc:postgresql://postgres:5432/sonar
-      SONAR_JDBC_USERNAME: sonar
-      SONAR_JDBC_PASSWORD: sonar
-      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: "true"
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+      - SONAR_JAVA_OPTS=-Xmx2048m -Xms512m
     volumes:
       - sonarqube_data:/opt/sonarqube/data
       - sonarqube_logs:/opt/sonarqube/logs
@@ -78,19 +61,11 @@ services:
     networks:
       - cicd-network
     restart: unless-stopped
-    ulimits:
-      nofile:
-        soft: 65536
-        hard: 65536
-      nproc:
-        soft: 4096
-        hard: 4096
 
 volumes:
   jenkins_home:
   android_sdk:
   nexus-data:
-  postgres_data:
   sonarqube_data:
   sonarqube_logs:
   sonarqube_extensions:
