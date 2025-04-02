@@ -1,0 +1,3 @@
+configuration-as-code:latest
+git:latest
+workflow-aggregator:latest

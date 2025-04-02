@@ -1,0 +1,7 @@
+workflow-aggregator:latest
+git:latest
+pipeline-model-definition:latest
+job-dsl:latest
+configuration-as-code:latest
+credentials:latest
+credentials-binding:latest

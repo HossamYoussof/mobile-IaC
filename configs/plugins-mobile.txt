@@ -1,0 +1,17 @@
+workflow-aggregator:latest
+git:latest
+pipeline-model-definition:latest
+job-dsl:latest
+configuration-as-code:latest
+credentials:latest
+credentials-binding:latest
+docker-workflow:latest
+dashboard-view:latest
+android-emulator:latest
+junit:latest
+htmlpublisher:latest
+email-ext:latest
+ansicolor:latest
+build-timeout:latest
+timestamper:latest
+pipeline-stage-view:latest
