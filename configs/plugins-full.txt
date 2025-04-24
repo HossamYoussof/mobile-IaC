@@ -34,26 +34,20 @@ dark-theme:latest
 
 # Mobile specific
 android-emulator:latest
-android-lint:latest
 htmlpublisher:latest
 google-play-android-publisher:latest
-xcode-integration:latest
 warnings-ng:latest
 
 # Code quality
 sonarqube-generic-coverage:latest
 sonargraph-integration:latest
 sonar:latest
-findbugs:latest
-checkstyle:latest
 dependency-check-jenkins-plugin:latest
-pmd:latest
 jacoco:latest
 
 # Binary repository integration
 nexus-artifact-uploader:latest
 artifactory:latest
-nexus-jenkins-plugin:latest
 
 # Continuous delivery
 delivery-pipeline-plugin:latest
@@ -65,7 +59,6 @@ build-pipeline-plugin:latest
 # Notifications and reporting
 email-ext:latest
 slack:latest
-teams-notifications:latest
 discord-notifier:latest
 telegram-notifications:latest
 influxdb:latest
@@ -73,8 +66,6 @@ build-monitor-plugin:latest
 
 # Security
 dependency-track:latest
-owasp-dependencies:latest
-secrets-manager:latest
 
 # SCM enhancements
 bitbucket:latest
@@ -85,18 +76,14 @@ github-api:latest
 
 # Deployment
 kubernetes:latest
-kubernetes-cd:latest
 azure-app-service:latest
 aws-device-farm:latest
 aws-codebuild:latest
 aws-lambda:latest
 google-kubernetes-engine:latest
-firebase-plugin:latest
 
 # Testing
 junit:latest
 test-results-analyzer:latest
-robotframework:latest
-appium:latest
 performance:latest
 gatling:latest
