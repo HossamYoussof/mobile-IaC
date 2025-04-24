@@ -33,18 +33,14 @@ dark-theme:latest
 
 # Mobile specific
 android-emulator:latest
-android-lint:latest
 htmlpublisher:latest
 google-play-android-publisher:latest
-xcode-integration:latest
 warnings-ng:latest
 
 # Code quality
 sonarqube-generic-coverage:latest
 sonargraph-integration:latest
 sonar:latest
-findbugs:latest
-checkstyle:latest
 dependency-check-jenkins-plugin:latest
 
 # Binary repository integration
