@@ -24,13 +24,13 @@ pipeline-utility-steps:latest
 # Docker integration
 docker-workflow:latest
 docker-plugin:latest
-docker-build-step:latest
-docker-compose-build-step:latest
 
 # UI enhancements
 blueocean:latest
 dashboard-view:latest
 dark-theme:latest
+workflow-support:latest
+pipeline-stage-view:latest
 
 # Mobile specific
 android-emulator:latest
@@ -54,15 +54,14 @@ delivery-pipeline-plugin:latest
 release:latest
 promoted-builds:latest
 parameterized-trigger:latest
-build-pipeline-plugin:latest
 
 # Notifications and reporting
 email-ext:latest
 slack:latest
 discord-notifier:latest
-telegram-notifications:latest
 influxdb:latest
 build-monitor-plugin:latest
+teams:latest
 
 # Security
 dependency-track:latest

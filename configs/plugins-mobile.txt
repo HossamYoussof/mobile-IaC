@@ -13,7 +13,6 @@ ssh-credentials:latest
 pipeline-model-definition:latest
 workflow-aggregator:latest
 pipeline-stage-view:latest
-pipeline-build-step:latest
 pipeline-github-lib:latest
 pipeline-graph-analysis:latest
 pipeline-input-step:latest
@@ -24,28 +23,16 @@ pipeline-utility-steps:latest
 # Docker integration
 docker-workflow:latest
 docker-plugin:latest
-docker-build-step:latest
 
 # UI enhancements
 blueocean:latest
 dashboard-view:latest
 dark-theme:latest
-
-# Mobile specific
-android-emulator:latest
-htmlpublisher:latest
-google-play-android-publisher:latest
-warnings-ng:latest
+workflow-support:latest
 
 # Code quality
-sonarqube-generic-coverage:latest
-sonargraph-integration:latest
 sonar:latest
-dependency-check-jenkins-plugin:latest
 
 # Binary repository integration
 nexus-artifact-uploader:latest
 artifactory:latest
-
-# Continuous delivery
-delivery-pipeline-plugin:latest
