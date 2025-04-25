@@ -23,14 +23,16 @@ services:
       - cicd-network
 
   android-builder:
-    image: thyrlian/android-sdk:latest
+    build:
+      context: .
+      dockerfile: configs/android-builder.Dockerfile
     container_name: android-builder
     volumes:
       - android_sdk:/opt/android-sdk
-      - ./projects:/projects
     networks:
       - cicd-network
-    command: tail -f /dev/null
+    depends_on:
+      - jenkins
 
   ios-builder:
     image: cimg/base:stable
@@ -79,4 +81,3 @@ volumes:
 networks:
   cicd-network:
     driver: bridge
-    
