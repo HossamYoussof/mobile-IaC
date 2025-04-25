@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: configs/Dockerfile
       args:
-        - PLUGINS_FILE=${PLUGINS_FILE:-configs/plugins-minimal.txt}
+        - PLUGINS_FILE=${PLUGINS_FILE:-configs/plugins.txt}
     container_name: mobile-cicd-jenkins
     privileged: true
     ports:
