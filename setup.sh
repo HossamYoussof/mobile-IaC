@@ -26,49 +26,12 @@ fi
 # Create projects directory if it doesn't exist
 mkdir -p projects
 
-# Choose Jenkins plugin configuration
-select_plugin_config() {
-  echo -e "${YELLOW}Select Jenkins plugin configuration:${NC}"
-  echo "1) Minimal (recommended for troubleshooting)"
-  echo "2) Core plugins"
-  echo "3) Mobile-specific plugins"
-  echo "4) Full plugin set"
-  echo -n "Enter choice (1-4): "
-  read plugin_choice
-  
-  case $plugin_choice in
-    1) 
-      echo -e "${GREEN}Using minimal plugins${NC}"
-      export PLUGINS_FILE="configs/plugins-minimal.txt" 
-      ;;
-    2) 
-      echo -e "${GREEN}Using core plugins${NC}"
-      export PLUGINS_FILE="configs/plugins-core.txt" 
-      ;;
-    3) 
-      echo -e "${GREEN}Using mobile-specific plugins${NC}"
-      export PLUGINS_FILE="configs/plugins-mobile.txt" 
-      ;;
-    4) 
-      echo -e "${GREEN}Using full plugin set${NC}"
-      export PLUGINS_FILE="configs/plugins-full.txt" 
-      ;;
-    *) 
-      echo -e "${RED}Invalid choice, using minimal plugins${NC}"
-      export PLUGINS_FILE="configs/plugins-minimal.txt" 
-      ;;
-  esac
-}
-
 # Configure environment
 setup_environment() {
   echo -e "${YELLOW}Setting up CI/CD environment...${NC}"
   
-  # Select plugin configuration
-  select_plugin_config
-  
   # Export the Docker build argument for the plugins file
-  export PLUGINS_FILE
+  export PLUGINS_FILE="configs/plugins.txt" 
   
   echo -e "${YELLOW}Starting CI/CD environment...${NC}"
   docker-compose up -d --build
