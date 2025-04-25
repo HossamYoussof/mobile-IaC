@@ -23,6 +23,7 @@ pipeline-utility-steps:latest
 # Docker integration
 docker-workflow:latest
 docker-plugin:latest
+swarm:latest
 
 # UI enhancements
 blueocean:latest
