@@ -59,7 +59,6 @@ services:
     mem_limit: 16g
     networks:
       - cicd-network
-    restart: unless-stopped
 
   sonarqube:
     image: sonarqube:community
@@ -77,7 +76,6 @@ services:
     mem_limit: 16g
     networks:
       - cicd-network
-    restart: unless-stopped
 
 volumes:
   jenkins_home:
