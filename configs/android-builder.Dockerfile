@@ -3,14 +3,14 @@ FROM thyrlian/android-sdk:latest
 # Install OpenJDK for Swarm client
 USER root
 RUN apt-get update && apt-get install -y \
-    openjdk-11-jre \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Create jenkins user and set permissions
 RUN useradd -m -d /home/jenkins -s /bin/bash jenkins \
     && mkdir -p /opt/swarm \
-    && chown -R jenkins:jenkins /opt/swarm
+    && chown -R jenkins:jenkins /opt/swarm \
+    && chown -R root:jenkins $ANDROID_HOME
 
 # Switch to jenkins user
 USER jenkins
