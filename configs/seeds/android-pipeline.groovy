@@ -7,13 +7,13 @@ pipelineJob('Android-CI-CD') {
             scm {
                 git {
                     remote {
-                        url('https://github.com/YOUR_ORG/YOUR_ANDROID_REPO.git')
+                        url('https://github.com/HossamYoussof/nowinandroid.git')
                         credentials('github-credentials')
                     }
-                    branch('*/main')
+                    branch('*/Jenkins_ci')
                 }
             }
-            scriptPath('Jenkinsfile')
+            scriptPath('.jenkins/Build')
         }
     }
     
@@ -40,49 +40,56 @@ pipelineJob('Mobile-Projects/Android-Template') {
     definition {
         cps {
             script('''
-pipeline {
-    agent {
-        label 'android-builder'
-    }
-    
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-        
-        stage('Build') {
-            steps {
-                sh './gradlew clean assembleDebug'
-            }
-        }
-        
-        stage('Test') {
-            steps {
-                sh './gradlew test'
-            }
-            post {
-                always {
-                    junit '**/build/test-results/**/*.xml'
+                pipeline {
+                    agent {
+                        node {
+                            label 'android'
+                        }
+                    }
+
+                    stages {
+                        stage('Checkout') {
+                            steps {
+                                checkout scmGit(
+                                    branches: [[name: 'main']],
+                                    userRemoteConfigs: [
+                                        [ url: 'https://github.com/android/architecture-samples.git' ]
+                                    ]
+                                )
+                            }
+                        }
+                    
+                        stage('Build') {
+                            steps {
+                                sh './gradlew clean assembleDebug'
+                            }
+                        }
+                        
+                        stage('Test') {
+                            steps {
+                                sh './gradlew test'
+                            }
+                            post {
+                                always {
+                                    junit '**/build/test-results/**/*.xml'
+                                }
+                            }
+                        }
+                        
+                        stage('Static Analysis') {
+                            steps {
+                                sh './gradlew sonarqube -Dsonar.host.url=http://localhost:9000'
+                            }
+                        }
+                        
+                        stage('Archive') {
+                            steps {
+                                archiveArtifacts artifacts: '**/build/outputs/apk/debug/*.apk', fingerprint: true
+                            }
+                        }
+                    }
                 }
-            }
-        }
-        
-        stage('Static Analysis') {
-            steps {
-                sh './gradlew sonarqube -Dsonar.host.url=http://localhost:9000'
-            }
-        }
-        
-        stage('Archive') {
-            steps {
-                archiveArtifacts artifacts: '**/build/outputs/apk/debug/*.apk', fingerprint: true
-            }
-        }
-    }
-}
-''')
+                ''')
             sandbox()
         }
     }
