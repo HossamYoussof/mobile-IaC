@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:lts
+FROM jenkins/jenkins:latest-jdk21
 
 ARG PLUGINS_FILE=configs/plugins-minimal.txt
 
